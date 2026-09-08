@@ -53,7 +53,7 @@ function LoginContent() {
       await setCookie("token", response.data.token);
 
       router.push(redirect);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (axios.isAxiosError<LoginError>(error)) {
         toast.update("login-loading", {
           render: error.response?.data.message || "Login failed",

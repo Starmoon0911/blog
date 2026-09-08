@@ -29,8 +29,10 @@ export default function TerminalLogo() {
 
   const commandRef = useRef<HTMLDivElement>(null);
 
-  const commandQueueRef = useRef<string[]>(shuffle(commands));
-  const currentCommandRef = useRef(commandQueueRef.current[0]);
+  const initialQueue = shuffle(commands);
+
+  const commandQueueRef = useRef<string[]>(initialQueue);
+  const currentCommandRef = useRef<string>(initialQueue[0]);
 
   useEffect(() => {
     if (commandRef.current) {
@@ -61,15 +63,18 @@ export default function TerminalLogo() {
           setText(text.slice(0, -1));
         }, 60);
       } else {
-        commandQueueRef.current.shift();
-        if (commandQueueRef.current.length === 0) {
-          commandQueueRef.current = shuffle(commands);
-        }
-        const nextCommand = commandQueueRef.current[0];
+        timeout = setTimeout(() => {
+          commandQueueRef.current.shift();
 
-        currentCommandRef.current = nextCommand;
+          if (commandQueueRef.current.length === 0) {
+            commandQueueRef.current = shuffle(commands);
+          }
 
-        setDeleting(false);
+          const nextCommand = commandQueueRef.current[0];
+
+          currentCommandRef.current = nextCommand;
+          setDeleting(false);
+        }, 60);
       }
     }
     return () => clearTimeout(timeout);
