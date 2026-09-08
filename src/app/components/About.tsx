@@ -34,6 +34,11 @@ const interests = [
 const posts = [{ title: "(待更新..)", href: "#" }];
 const experiences = [
   {
+    date:"2026/9/4 — 2027/3/12",
+    title:"SITCON 2027開發組組員",
+    description: "有幸成為SITCON 2027開發組組員，已經能想像之後有多忙了ww"
+  },
+  {
     date: "2026/7/12 — 2026/7/18",
     title: "NTU CSIE Summer Camp",
     description:
