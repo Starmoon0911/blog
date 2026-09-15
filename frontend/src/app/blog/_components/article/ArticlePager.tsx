@@ -1,28 +1,14 @@
 import Link from "next/link";
 
-import {
-  buildBlogHref,
-  getAdjacentPosts,
-  type BlogCodeBlock,
-  type BlogPost,
-} from "../blog-data";
+import { buildBlogHref } from "../../_lib/format";
+import { getAdjacentPosts } from "../../_lib/repository";
 
-export function ArticleCode({ block }: { block: BlogCodeBlock }) {
-  return (
-    <figure className="my-8 overflow-hidden rounded-xl border border-white/10 bg-[#07090b]/90">
-      <figcaption className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 font-mono text-[11px] text-zinc-500">
-        <span>{block.filename}</span>
-        <span>{block.language}</span>
-      </figcaption>
-      <pre className="overflow-x-auto p-4 text-sm leading-7 text-zinc-300 sm:p-5">
-        <code>{block.code}</code>
-      </pre>
-    </figure>
-  );
-}
+type ArticlePagerProps = {
+  slug: string;
+};
 
-export function ArticlePager({ post }: { post: BlogPost }) {
-  const { previous, next } = getAdjacentPosts(post.slug);
+export default function ArticlePager({ slug }: ArticlePagerProps) {
+  const { previous, next } = getAdjacentPosts(slug);
 
   return (
     <nav

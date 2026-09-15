@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import ArticleShell from "../components/ArticleShell";
-import { blogPosts, getPostBySlug } from "../blog-data";
+import { blogPosts } from "../_content/posts";
+import { getPostBySlug } from "../_lib/repository";
+import ArticleShell from "../_components/article/ArticleShell";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;

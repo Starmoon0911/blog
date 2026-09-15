@@ -1,61 +1,17 @@
-export const blogCategories = ["Frontend", "Backend", "DevOps"] as const;
+import type { BlogPost } from "../_lib/types";
 
-export type BlogCategory = (typeof blogCategories)[number];
-
-export type BlogCodeBlock = {
-  language: string;
-  filename: string;
-  code: string;
-};
-
-export type BlogSection = {
-  id: string;
-  heading: string;
-  paragraphs: readonly string[];
-  bullets?: readonly string[];
-  code?: BlogCodeBlock;
-};
-
-export type BlogPost = {
-  slug: string;
-  title: string;
-  kicker: string;
-  summary: string;
-  image: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-  category: BlogCategory;
-  tags: readonly string[];
-  publishedAt: string;
-  publishedLabel: string;
-  readingMinutes: number;
-  featured?: boolean;
-  sections: readonly BlogSection[];
-};
-
-const blogAuthor = {
-  name: "wei0911",
-  avatar: "/avatar.jpg",
-} as const;
-
-export const blogPosts: readonly BlogPost[] = [
+export const blogPosts = [
   {
     slug: "nextjs-app-router-notes",
     title: "我如何整理 Next.js App Router 的專案邊界",
-    kicker: "Architecture Notes",
     summary:
       "從 route、feature 到 shared layer，記錄一套讓小型專案不會太早抽象、長大後也不至於失控的目錄策略。",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
-    author: blogAuthor,
     category: "Frontend",
     tags: ["Next.js", "React", "TypeScript"],
     publishedAt: "2026-08-28",
-    publishedLabel: "2026.08.28",
     readingMinutes: 8,
-    featured: true,
     sections: [
       {
         id: "start-from-boundaries",
@@ -91,16 +47,13 @@ export const blogPosts: readonly BlogPost[] = [
   {
     slug: "accessible-interface-checklist",
     title: "把可及性變成前端交付前的固定檢查",
-    kicker: "Interface Quality",
     summary:
       "不用等到正式稽核，從語意、鍵盤、焦點到對比，先建立一份每次都能重複執行的前端檢查清單。",
     image:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
-    author: blogAuthor,
     category: "Frontend",
     tags: ["Accessibility", "CSS", "UX"],
     publishedAt: "2026-08-14",
-    publishedLabel: "2026.08.14",
     readingMinutes: 6,
     sections: [
       {
@@ -134,16 +87,13 @@ export const blogPosts: readonly BlogPost[] = [
   {
     slug: "express-service-boundaries",
     title: "Express API 的薄 Controller 與 Service 邊界",
-    kicker: "Backend Structure",
     summary:
       "以文章發布流程為例，拆解驗證、授權、商業規則與資料存取應該各自放在哪一層。",
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
-    author: blogAuthor,
     category: "Backend",
     tags: ["Express", "TypeScript", "API"],
     publishedAt: "2026-07-30",
-    publishedLabel: "2026.07.30",
     readingMinutes: 9,
     sections: [
       {
@@ -180,16 +130,13 @@ export const blogPosts: readonly BlogPost[] = [
   {
     slug: "supabase-rls-first",
     title: "先寫 RLS，再開始串 Supabase 資料",
-    kicker: "Data Security",
     summary:
       "把 Row Level Security 當成資料模型的一部分，避免前端便利性在不知不覺間變成公開權限。",
     image:
       "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80",
-    author: blogAuthor,
     category: "Backend",
     tags: ["Supabase", "PostgreSQL", "Security"],
     publishedAt: "2026-07-12",
-    publishedLabel: "2026.07.12",
     readingMinutes: 7,
     sections: [
       {
@@ -225,16 +172,13 @@ using (status = 'published');`,
   {
     slug: "container-deploy-checklist",
     title: "小型服務的 Container 部署前清單",
-    kicker: "Shipping Notes",
     summary:
       "從映像檔大小、環境變數到健康檢查，整理一份個人專案也值得遵守的部署前確認流程。",
     image:
       "https://images.unsplash.com/photo-1605745341112-85968b19335b?auto=format&fit=crop&w=1200&q=80",
-    author: blogAuthor,
     category: "DevOps",
     tags: ["Docker", "Deployment", "CI"],
     publishedAt: "2026-06-24",
-    publishedLabel: "2026.06.24",
     readingMinutes: 5,
     sections: [
       {
@@ -268,16 +212,13 @@ using (status = 'published');`,
   {
     slug: "logs-that-answer-questions",
     title: "讓 Log 回答問題，而不只是留下文字",
-    kicker: "Observability",
     summary:
       "從請求識別碼、結構化欄位與事件命名開始，讓小型 API 的紀錄也能支援真正的除錯。",
     image:
       "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1200&q=80",
-    author: blogAuthor,
     category: "DevOps",
     tags: ["Observability", "Logging", "API"],
     publishedAt: "2026-06-05",
-    publishedLabel: "2026.06.05",
     readingMinutes: 6,
     sections: [
       {
@@ -313,41 +254,4 @@ using (status = 'published');`,
       },
     ],
   },
-];
-
-export function getPostBySlug(slug: string) {
-  return blogPosts.find((post) => post.slug === slug);
-}
-
-export function filterPosts(
-  posts: readonly BlogPost[],
-  category: BlogCategory | null,
-  tag: string | null,
-) {
-  return posts.filter(
-    (post) =>
-      (!category || post.category === category) &&
-      (!tag || post.tags.includes(tag)),
-  );
-}
-
-export function buildBlogHref(slug: string) {
-  return `/blog/${slug}`;
-}
-
-export function getEditorialLead(posts: readonly BlogPost[]) {
-  return posts.find((post) => post.featured) ?? posts[0];
-}
-
-export function getAdjacentPosts(slug: string) {
-  const index = blogPosts.findIndex((post) => post.slug === slug);
-
-  if (index === -1) {
-    return { previous: undefined, next: undefined };
-  }
-
-  return {
-    previous: index > 0 ? blogPosts[index - 1] : undefined,
-    next: index < blogPosts.length - 1 ? blogPosts[index + 1] : undefined,
-  };
-}
+] as const satisfies readonly BlogPost[];

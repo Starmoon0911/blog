@@ -1,7 +1,9 @@
 import Link from "next/link";
 
-import type { BlogPost } from "../blog-data";
-import EditorialArticle from "./EditorialArticle";
+import type { BlogPost } from "../../_lib/types";
+import ArticleBody from "./ArticleBody";
+import ArticleHeader from "./ArticleHeader";
+import ArticlePager from "./ArticlePager";
 
 type ArticleShellProps = {
   post: BlogPost;
@@ -20,7 +22,16 @@ export default function ArticleShell({ post }: ArticleShellProps) {
           </Link>
         </div>
 
-        <EditorialArticle post={post} />
+        <article className="overflow-hidden rounded-2xl border border-white/15 bg-black/40 shadow-2xl backdrop-blur-2xl">
+          <ArticleHeader post={post} />
+
+          <div className="px-5 py-10 sm:px-10 sm:py-14 lg:px-16">
+            <div className="mx-auto max-w-[72ch]">
+              <ArticleBody sections={post.sections} />
+              <ArticlePager slug={post.slug} />
+            </div>
+          </div>
+        </article>
       </div>
     </main>
   );

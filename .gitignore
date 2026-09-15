@@ -45,3 +45,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 backend/.prisma-schema-hash
+
+# Local git worktrees
+.worktrees/
