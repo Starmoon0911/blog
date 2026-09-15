@@ -47,6 +47,10 @@ describe("blog data", () => {
   test("returns no metadata for an unknown tag", () => {
     expect(filterPostMeta(listPostMeta(), "missing-tag")).toEqual([]);
   });
+
+  test("returns no metadata for an empty tag", () => {
+    expect(filterPostMeta(listPostMeta(), "")).toEqual([]);
+  });
 });
 
 describe("blog navigation", () => {

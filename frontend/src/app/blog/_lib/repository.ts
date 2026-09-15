@@ -11,7 +11,9 @@ export function listTags() {
 }
 
 export function filterPostMeta(posts: readonly PostMeta[], tag: string | null) {
-  return tag ? posts.filter((post) => post.tags.includes(tag)) : posts;
+  return tag !== null
+    ? posts.filter((post) => post.tags.includes(tag))
+    : posts;
 }
 
 export function getPostBySlug(slug: string) {
