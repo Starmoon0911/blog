@@ -6,7 +6,11 @@ import {
   formatPublishedDate,
   formatReadingTime,
 } from "../_lib/format";
+import { blogPosts } from "../_content/posts";
 import { listPostMeta } from "../_lib/repository";
+import ArticleBody from "./article/ArticleBody";
+import ArticleHeader from "./article/ArticleHeader";
+import ArticlePager from "./article/ArticlePager";
 import PostGrid from "./PostGrid";
 import TagFilter from "./TagFilter";
 
@@ -50,5 +54,41 @@ describe("blog list components", () => {
     );
     expect(markup).not.toContain("The Future of UI Design");
     expect(markup).not.toContain("transform:translateY");
+  });
+});
+
+describe("blog article components", () => {
+  test("renders article header metadata from canonical values", () => {
+    const post = blogPosts[0];
+    const markup = renderToStaticMarkup(<ArticleHeader post={post} />);
+
+    expect(markup).toContain(post.title);
+    expect(markup).toContain(post.summary);
+    expect(markup).toContain(formatPublishedDate(post.publishedAt));
+    expect(markup).toContain(formatReadingTime(post.readingMinutes));
+    expect(markup).toContain(`dateTime="${post.publishedAt}"`);
+  });
+
+  test("renders semantic article sections and code figures", () => {
+    const post = blogPosts[0];
+    const markup = renderToStaticMarkup(
+      <ArticleBody sections={post.sections} />,
+    );
+
+    expect(markup).toContain(`id="${post.sections[0].id}"`);
+    expect(markup).toContain("<figure");
+    expect(markup).toContain("<figcaption");
+    expect(markup).toContain("<pre");
+    expect(markup).toContain("<code");
+  });
+
+  test("renders adjacent article links from a slug", () => {
+    const markup = renderToStaticMarkup(
+      <ArticlePager slug={blogPosts[1].slug} />,
+    );
+
+    expect(markup).toContain(buildBlogHref(blogPosts[0].slug));
+    expect(markup).toContain(buildBlogHref(blogPosts[2].slug));
+    expect(markup).toContain('aria-label="相鄰文章"');
   });
 });
