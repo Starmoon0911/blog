@@ -34,6 +34,17 @@ describe("blog list interactions", () => {
       expect(markup).toContain(`dateTime="${post.publishedAt}"`);
     }
 
+    for (const publishedLabel of [
+      "2026.08.28",
+      "2026.08.14",
+      "2026.07.30",
+      "2026.07.12",
+      "2026.06.24",
+      "2026.06.05",
+    ]) {
+      expect(markup).toContain(`>${publishedLabel}</time>`);
+    }
+
     expect(markup.match(/data-slot="glass-blog-card"/g)?.length).toBe(
       blogPosts.length,
     );

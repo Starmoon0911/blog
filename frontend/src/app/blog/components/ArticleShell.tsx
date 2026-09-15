@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { BlogPost } from "../blog-data";
+import type { BlogPost } from "../_lib/types";
 import EditorialArticle from "./EditorialArticle";
 
 type ArticleShellProps = {
