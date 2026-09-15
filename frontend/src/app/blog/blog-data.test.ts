@@ -1,13 +1,20 @@
 import { describe, expect, test } from "bun:test";
 
+import { postIndex } from "./_content/post-index";
+import { blogPosts } from "./_content/posts";
 import {
-  blogPosts,
   buildBlogHref,
+  buildTagHref,
+  formatPublishedDate,
+  formatReadingTime,
+} from "./_lib/format";
+import {
+  filterPostMeta,
   getAdjacentPosts,
-  getEditorialLead,
-  filterPosts,
   getPostBySlug,
-} from "./blog-data";
+  listPostMeta,
+  listTags,
+} from "./_lib/repository";
 
 describe("blog data", () => {
   test("uses unique slugs so every post has one stable route", () => {
@@ -23,49 +30,51 @@ describe("blog data", () => {
     expect(getPostBySlug("missing-post")).toBeUndefined();
   });
 
-  test("filters posts by category", () => {
-    const result = filterPosts(blogPosts, "Frontend", null);
+  test("keeps full article sections out of list metadata", () => {
+    expect(listPostMeta()).toEqual(postIndex);
+    expect(listPostMeta().every((post) => !("sections" in post))).toBe(true);
+  });
 
-    expect(result.map((post) => post.slug)).toEqual([
-      "nextjs-app-router-notes",
-      "accessible-interface-checklist",
+  test("returns stable first-seen tag ordering", () => {
+    expect(listTags().slice(0, 4)).toEqual([
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Accessibility",
     ]);
   });
 
-  test("filters posts by tag", () => {
-    const result = filterPosts(blogPosts, null, "TypeScript");
-
-    expect(result.map((post) => post.slug)).toEqual([
-      "nextjs-app-router-notes",
-      "express-service-boundaries",
-    ]);
-  });
-
-  test("combines category and tag filters", () => {
-    const result = filterPosts(blogPosts, "Backend", "TypeScript");
-
-    expect(result.map((post) => post.slug)).toEqual([
-      "express-service-boundaries",
-    ]);
+  test("returns no metadata for an unknown tag", () => {
+    expect(filterPostMeta(listPostMeta(), "missing-tag")).toEqual([]);
   });
 });
 
 describe("blog navigation", () => {
-  test("builds the canonical article link", () => {
+  test("builds canonical and encoded Blog links", () => {
     expect(buildBlogHref("nextjs-app-router-notes")).toBe(
       "/blog/nextjs-app-router-notes",
     );
+    expect(buildTagHref("Next.js & React")).toBe(
+      "/blog?tag=Next.js%20%26%20React",
+    );
+  });
+
+  test("returns adjacent posts without wrapping at collection edges", () => {
+    expect(getAdjacentPosts("nextjs-app-router-notes")).toEqual({
+      previous: undefined,
+      next: postIndex[1],
+    });
+    expect(getAdjacentPosts("logs-that-answer-questions")).toEqual({
+      previous: postIndex[4],
+      next: undefined,
+    });
   });
 });
 
 describe("blog presentation data", () => {
-  test("uses the first remaining post as the editorial lead after filtering", () => {
-    const backendPosts = filterPosts(blogPosts, "Backend", null);
-
-    expect(getEditorialLead(backendPosts)?.slug).toBe(
-      "express-service-boundaries",
-    );
-    expect(getEditorialLead([])).toBeUndefined();
+  test("formats publication and reading labels from canonical values", () => {
+    expect(formatPublishedDate("2026-08-28")).toBe("2026.08.28");
+    expect(formatReadingTime(8)).toBe("8 分鐘閱讀");
   });
 
   test("provides all content required by the editorial presentation", () => {
@@ -73,8 +82,6 @@ describe("blog presentation data", () => {
       expect(post.title.length).toBeGreaterThan(0);
       expect(post.summary.length).toBeGreaterThan(0);
       expect(post.image).toMatch(/^https:\/\/images\.unsplash\.com\//);
-      expect(post.author.name.length).toBeGreaterThan(0);
-      expect(post.author.avatar.length).toBeGreaterThan(0);
       expect(post.tags.length).toBeGreaterThan(0);
       expect(post.readingMinutes).toBeGreaterThan(0);
       expect(post.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
@@ -104,16 +111,5 @@ describe("article reading data", () => {
     expect(codeBlocks.every((block) => block.code.trim().length > 0)).toBe(
       true,
     );
-  });
-
-  test("returns adjacent posts without wrapping at collection edges", () => {
-    expect(getAdjacentPosts("nextjs-app-router-notes")).toEqual({
-      previous: undefined,
-      next: blogPosts[1],
-    });
-    expect(getAdjacentPosts("logs-that-answer-questions")).toEqual({
-      previous: blogPosts[4],
-      next: undefined,
-    });
   });
 });

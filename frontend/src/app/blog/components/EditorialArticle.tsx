@@ -1,6 +1,7 @@
 import { Clock } from "lucide-react";
 
-import type { BlogPost } from "../blog-data";
+import { formatPublishedDate, formatReadingTime } from "../_lib/format";
+import type { BlogPost } from "../_lib/types";
 import { ArticleCode, ArticlePager } from "./ArticleParts";
 
 type EditorialArticleProps = {
@@ -14,10 +15,12 @@ export default function EditorialArticle({ post }: EditorialArticleProps) {
         <div className="mx-auto max-w-4xl">
           <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-400">
             <span className="text-cyan-300">{post.category}</span>
-            <time dateTime={post.publishedAt}>{post.publishedLabel}</time>
+            <time dateTime={post.publishedAt}>
+              {formatPublishedDate(post.publishedAt)}
+            </time>
             <span className="flex items-center gap-1.5">
               <Clock size={13} aria-hidden="true" />
-              {post.readingMinutes} min read
+              {formatReadingTime(post.readingMinutes)}
             </span>
           </div>
           <h1 className="mt-8 max-w-4xl font-serif text-4xl leading-[1.08] font-medium tracking-[-0.025em] text-balance text-white sm:text-6xl lg:text-7xl">

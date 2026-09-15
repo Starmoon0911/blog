@@ -1,11 +1,8 @@
 import Link from "next/link";
 
-import {
-  buildBlogHref,
-  getAdjacentPosts,
-  type BlogCodeBlock,
-  type BlogPost,
-} from "../blog-data";
+import { buildBlogHref } from "../_lib/format";
+import { getAdjacentPosts } from "../_lib/repository";
+import type { BlogCodeBlock, BlogPost } from "../_lib/types";
 
 export function ArticleCode({ block }: { block: BlogCodeBlock }) {
   return (

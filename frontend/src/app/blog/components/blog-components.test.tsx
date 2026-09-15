@@ -27,7 +27,6 @@ describe("blog list interactions", () => {
       const href = buildBlogHref(post.slug);
       expect(markup).toContain(`href="${href}"`);
       expect(markup).toContain(`alt="${post.title}"`);
-      expect(markup).not.toContain(post.author.name);
       for (const tag of post.tags) {
         expect(markup).toContain(`>${tag}</`);
       }
