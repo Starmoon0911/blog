@@ -48,6 +48,16 @@ describe("blog data", () => {
     expect(filterPostMeta(listPostMeta(), "missing-tag")).toEqual([]);
   });
 
+  test("filters metadata by a known tag", () => {
+    expect(
+      filterPostMeta(listPostMeta(), "TypeScript").map((post) => post.slug),
+    ).toEqual(["nextjs-app-router-notes", "express-service-boundaries"]);
+  });
+
+  test("returns all metadata when no tag filter is selected", () => {
+    expect(filterPostMeta(listPostMeta(), null)).toEqual(listPostMeta());
+  });
+
   test("returns no metadata for an empty tag", () => {
     expect(filterPostMeta(listPostMeta(), "")).toEqual([]);
   });
@@ -108,7 +118,9 @@ describe("article reading data", () => {
 
   test("includes realistic code content for code-aware reading layouts", () => {
     const codeBlocks = blogPosts.flatMap((post) =>
-      post.sections.flatMap((section) => (section.code ? [section.code] : [])),
+      post.sections.flatMap((section) =>
+        "code" in section && section.code ? [section.code] : [],
+      ),
     );
 
     expect(codeBlocks.length).toBeGreaterThanOrEqual(4);
