@@ -48,3 +48,5 @@ backend/.prisma-schema-hash
 
 # Local git worktrees
 .worktrees/
+
+.opencode
