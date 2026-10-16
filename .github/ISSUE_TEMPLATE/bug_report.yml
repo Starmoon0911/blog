@@ -1,0 +1,70 @@
+name: 🐛 Bug Report
+description: Report something that isn't working as expected
+title: "[bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    value: |
+      Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the bug.
+      placeholder: What happened?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      multiple: true
+      options:
+        - Frontend
+        - Backend
+        - Both
+        - Build & tooling
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Tell us how we can reproduce the problem.
+      placeholder: |
+        1. Run `bun run dev:frontend` (or `bun run dev:backend`)
+        2. Go to `/...`
+        3. Click on / trigger '...'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead? Include any error messages or stack traces.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      value: |
+        - OS:
+        - Browser:
+        - Bun version:
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / logs
+      description: If applicable, drag and drop screenshots or paste relevant logs here.

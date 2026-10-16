@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@arayui/rainy-day": "git+https://github.com/Starmoon0911/AnyRainyDay.git#fix/video-background",
+    "@radix-ui/react-avatar": "^1.2.6",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
     "axios": "^1.19.0",
