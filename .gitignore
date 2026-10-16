@@ -50,3 +50,6 @@ backend/.prisma-schema-hash
 .worktrees/
 
 .opencode
+# Playwright/browser verification artifacts
+.design-checks/
+.playwright-cli/

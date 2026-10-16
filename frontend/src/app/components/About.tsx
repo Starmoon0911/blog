@@ -91,6 +91,15 @@ function transitionRange(index: number) {
   };
 }
 
+// 錨點著陸 #about 時 scrollYProgress 精確為 0，第 1 層若開場仍是 0，
+// 六層 opacity 會全部落在 0 的 dead zone（issue #4）。第 1 層的入場輸出
+// 直接改用完整可見值，其餘交叉淡入淡出區間不受影響。
+function withVisibleEntry<T>(values: T[], index: number, visible: T): T[] {
+  return index === 0
+    ? values.map((value, i) => (i < 2 ? visible : value))
+    : values;
+}
+
 function AboutContent() {
   return (
     <div className="pt-12 md:pt-16">
@@ -301,7 +310,7 @@ function StoryLayer({
     isLast
       ? [entryStart, entryEnd, 1]
       : [entryStart, entryEnd, exitStart, exitEnd],
-    isLast ? [0, 1, 1] : [0, 1, 1, 0],
+    withVisibleEntry(isLast ? [0, 1, 1] : [0, 1, 1, 0], index, 1),
   );
 
   const y = useTransform(
@@ -309,7 +318,7 @@ function StoryLayer({
     isLast
       ? [entryStart, entryEnd, 1]
       : [entryStart, entryEnd, exitStart, exitEnd],
-    isLast ? [24, 0, 0] : [24, 0, 0, -24],
+    withVisibleEntry(isLast ? [24, 0, 0] : [24, 0, 0, -24], index, 0),
   );
 
   const pointerEvents = useTransform(opacity, (value) =>
@@ -347,15 +356,23 @@ function HeaderLayer({
   const opacity = useTransform(
     progress,
     input,
-    isLast ? [0, 1, 1] : [0, 1, 1, 0],
+    withVisibleEntry(isLast ? [0, 1, 1] : [0, 1, 1, 0], index, 1),
   );
-  const y = useTransform(progress, input, isLast ? [8, 0, 0] : [8, 0, 0, -8]);
+  const y = useTransform(
+    progress,
+    input,
+    withVisibleEntry(isLast ? [8, 0, 0] : [8, 0, 0, -8], index, 0),
+  );
   const filter = useTransform(
     progress,
     input,
-    isLast
-      ? ["blur(2px)", "blur(0px)", "blur(0px)"]
-      : ["blur(2px)", "blur(0px)", "blur(0px)", "blur(2px)"],
+    withVisibleEntry(
+      isLast
+        ? ["blur(2px)", "blur(0px)", "blur(0px)"]
+        : ["blur(2px)", "blur(0px)", "blur(0px)", "blur(2px)"],
+      index,
+      "blur(0px)",
+    ),
   );
 
   return (
@@ -385,12 +402,12 @@ function BackgroundTitleLayer({
   const opacity = useTransform(
     progress,
     input,
-    isLast ? [0, 1, 1] : [0, 1, 1, 0],
+    withVisibleEntry(isLast ? [0, 1, 1] : [0, 1, 1, 0], index, 1),
   );
   const y = useTransform(
     progress,
     input,
-    isLast ? [18, 0, 0] : [18, 0, 0, -18],
+    withVisibleEntry(isLast ? [18, 0, 0] : [18, 0, 0, -18], index, 0),
   );
 
   return (
