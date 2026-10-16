@@ -5,8 +5,9 @@ labels:
   - enhancement
 body:
   - type: markdown
-    value: |
-      Thanks for suggesting an improvement!
+    attributes:
+      value: |
+        Thanks for suggesting an improvement!
   - type: textarea
     id: problem
     attributes:
